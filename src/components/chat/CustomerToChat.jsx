@@ -54,8 +54,8 @@ const CustomerToChat = ({id}) => {
   );
 
   return (
-    <NavLink to={`/chat/${id}`} className={({isActive})=> isActive ? 'active-chat' : ''}>
-      <ListItem>
+    <NavLink to={`/chat/${id}`} className={({isActive})=> isActive ? 'active-chat' : ''} style={{display: 'inline-block',marginBottom: '5px', width: '100%'}}>
+      <ListItem sx={{borderRadius: '4px'}}>
         <ListItemAvatar>
           <Avatar alt="محمد احمد" src="" sx={{ width: "46px", height: "46px" }} />
         </ListItemAvatar>
