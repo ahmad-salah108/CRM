@@ -5,7 +5,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 const ConversationHeader = () => {
   const theme = useTheme();
   return (
-    <Box sx={{padding: '16px', background: theme.palette.secondary.main, color: '#fff'}}>
+    <Box sx={{padding: '6px 16px', background: theme.palette.secondary.main, color: '#fff'}}>
       <Stack direction={'row'} sx={{justifyContent: 'space-between'}}>
         <Stack direction={'row'} sx={{alignItems: 'center', gap: '20px'}}>
           <Avatar alt="محمد احمد" src='' sx={{width: '46px', height: '46px'}}/>

@@ -11,6 +11,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { NavLink } from "react-router-dom";
+import ReactTimeAgo from "react-time-ago";
 
 const NewMessages = styled(Box)(({ theme }) => ({
   width: "18px",
@@ -34,7 +35,7 @@ const LastMessage = ({ msg, num }) => (
   </Stack>
 );
 
-const CustomerToChat = ({id}) => {
+const CustomerToChat = ({data}) => {
   const theme = useTheme();
 
   const Title = ({ name, time }) => (
@@ -48,19 +49,19 @@ const CustomerToChat = ({id}) => {
     >
       <Box>{name}</Box>
       <Typography sx={{ color: theme.palette.textMuted, fontSize: "13px" }}>
-        {time}
+        <ReactTimeAgo date={time} locale="ar" />
       </Typography>
     </Stack>
   );
 
   return (
-    <NavLink to={`/chat/${id}`} className={({isActive})=> isActive ? 'active-chat' : ''} style={{display: 'inline-block',marginBottom: '5px', width: '100%'}}>
+    <NavLink to={`/chat/${data.id}`} className={({isActive})=> isActive ? 'active-chat' : ''} style={{display: 'inline-block',marginBottom: '5px', width: '100%'}}>
       <ListItem sx={{borderRadius: '4px'}}>
         <ListItemAvatar>
           <Avatar alt="محمد احمد" src="" sx={{ width: "46px", height: "46px" }} />
         </ListItemAvatar>
         <ListItemText
-          primary={<Title name={"محمد احمد"} time={"منذ يومين"} />}
+          primary={<Title name={data.name} time={new Date(data.last_time * 1000)} />}
           secondary={<LastMessage msg={"الرسالة الاخيرة"} num={2} />}
         />
       </ListItem>

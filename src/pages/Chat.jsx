@@ -6,7 +6,7 @@ import ChatDetails from '../components/chat/ChatDetails';
 const Chat = () => {
   const theme = useTheme();
   return (
-    <Box sx={{width: '100%', border: `1px solid ${theme.palette.ddd}`, borderRadius: '7px', overflow: 'hidden'}}>
+    <Box sx={{width: '100%', border: `1px solid ${theme.palette.ddd}`, borderRadius: '7px', overflow: 'hidden', boxShadow: '0 0 10px 3px rgb(0 0 0 / 5%)'}}>
       <Stack direction={'row'} sx={{minWidth: '1000px'}}>
         <ChatDetails/>
         <Divider orientation='vertical' flexItem={true}/>

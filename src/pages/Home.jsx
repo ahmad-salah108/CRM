@@ -4,7 +4,8 @@ import ProgressProvider from "../utils/ProgressProvider";
 import "react-circular-progressbar/dist/styles.css";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Box } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 // data for chart
@@ -37,16 +38,69 @@ const data = {
 
 const Home = () => {
   return (
-    <Box>
-      <Box sx={{width: '100px'}}>
+    <Stack direction={'column'} sx={{gap: '24px'}}>
+      <Stack direction={'row'} sx={{justifyContent: 'center', flexWrap: 'wrap', rowGap: '20px', columnGap: '22px', padding: '24px'}} bgcolor="bgLight">
+        <Paper elevation={3} sx={{padding: '30px 52px'}}>
+          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+            <Stack direction={'column'}>
+              <Typography variant="h4">150</Typography>
+              <Typography color='cardText'>عدد المحادثات</Typography>
+            </Stack>
+            <ChatBubbleIcon fontSize="large" color='primary'/>
+          </Stack>
+        </Paper>
+        <Paper elevation={3} sx={{padding: '30px 52px'}}>
+          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+            <Stack direction={'column'}>
+              <Typography variant="h4">150</Typography>
+              <Typography color='cardText'>عدد المحادثات</Typography>
+            </Stack>
+            <ChatBubbleIcon fontSize="large" color='primary'/>
+          </Stack>
+        </Paper>
+        <Paper elevation={3} sx={{padding: '30px 52px'}}>
+          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+            <Stack direction={'column'}>
+              <Typography variant="h4">150</Typography>
+              <Typography color='cardText'>عدد المحادثات</Typography>
+            </Stack>
+            <ChatBubbleIcon fontSize="large" color='primary'/>
+          </Stack>
+        </Paper>
+        <Paper elevation={3} sx={{padding: '30px 52px'}}>
+          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+            <Stack direction={'column'}>
+              <Typography variant="h4">150</Typography>
+              <Typography color='cardText'>عدد المحادثات</Typography>
+            </Stack>
+            <ChatBubbleIcon fontSize="large" color='primary'/>
+          </Stack>
+        </Paper>
+        <Paper elevation={3} sx={{padding: '30px 52px'}}>
+          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+            <Stack direction={'column'}>
+              <Typography variant="h4">150</Typography>
+              <Typography color='cardText'>عدد المحادثات</Typography>
+            </Stack>
+            <ChatBubbleIcon fontSize="large" color='primary'/>
+          </Stack>
+        </Paper>
+      </Stack>
+      {/* <Box sx={{width: '100px'}}>
         <ProgressProvider valueStart={0} valueEnd={66}>
           {(value) => <CircularProgressbar value={value} text={`${value}%`} />}
         </ProgressProvider>
-      </Box>
-      <Box sx={{width: '300px'}}>
-        <Doughnut data={data} />
-      </Box>
-    </Box>
+      </Box> */}
+      <Stack direction={'row'} sx={{justifyContent: 'center', flexWrap: 'wrap', gap: '24px'}}>
+        <Paper elevation={3} sx={{width: '63%',padding: '30px'}}>
+        </Paper>
+        <Paper elevation={3} sx={{padding: '30px'}}>
+          <Box sx={{width: '350px', height: '350px'}}>
+            <Doughnut data={data} />
+          </Box>
+        </Paper>
+      </Stack>
+    </Stack>
   );
 };
 

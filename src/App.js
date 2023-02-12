@@ -12,6 +12,7 @@ import {
 import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import CoversationBox from "./components/chat/CoversationBox";
+import Login from "./pages/Login";
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -28,11 +29,14 @@ const theme = createTheme({
     secondary: {
       main: '#A084DC'
     },
-    textMuted: 'rgba(0, 0, 0, 0.6)',
-    ddd: '#ddd',
     white: {
       main: '#fff'
-    }
+    },
+    textMuted: 'rgba(0, 0, 0, 0.6)',
+    ddd: '#ddd',
+    eee: '#eee',
+    cardText: '#828282',
+    bgLight: 'rgb(191, 172, 226, 0.5)'
   }
 });
 
@@ -66,6 +70,10 @@ const router = createBrowserRouter([
         element: page404
       }
     ],
+  },
+  {
+    path: '/login',
+    element: <Login/>
   },
   {
     path: '*',
