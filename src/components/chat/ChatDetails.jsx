@@ -30,25 +30,27 @@ const ChatDetails = () => {
         },
       }
     )
-      .then((res) => {
-        if (!res.ok) {
-          enqueueSnackbar("لا يوجد اتصال بالانترنت", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-          setLoading(false);
-          throw new Error("error while fetching conversations");
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        setConversations(data.conversations);
         setLoading(false);
-        console.log(data);
+        if(!data.status){
+          Object.keys(data.errors).slice(0, 3).forEach(e => {
+            enqueueSnackbar(data.errors[e][0], {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+          });
+        }else{
+          setConversations(data.conversations);
+        }
       })
       .catch((err) => {
         setLoading(false);
-        throw new Error(err);
+        enqueueSnackbar('لا يوجد اتصال بالانترنت', {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+        console.log(err);
       });
   }, []);
   return (

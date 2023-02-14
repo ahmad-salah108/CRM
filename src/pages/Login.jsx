@@ -91,7 +91,7 @@ const Login = () => {
             sx={{
               backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
-              backgroundPositionY: "-200px",
+              backgroundPositionY: "-215px",
               backgroundPositionX: "-40px",
               backgroundRepeat: "no-repeat"
             }}
@@ -128,25 +128,17 @@ const Login = () => {
                   required
                 />
                 <Typography sx={{textAlign: 'center', fontSize: '14px'}} color={'error'} ref={errMessage}></Typography>
-                {!loading && (
-                  <Button type="submit" variant="contained" size="large">
-                    تسجيل دخول
-                  </Button>
-                )}
-                {loading && (
-                  <Button
-                    variant="contained"
-                    sx={{ pointerEvents: "none", opacity: "0.5" }}
-                  >
-                    <CircularProgress
+                  <Button type="submit" variant="contained" size="large" className={loading ? 'disabled' : ''}>
+                    {loading && <CircularProgress
                       sx={{
-                        width: "30px !important",
-                        height: "30px !important",
+                        width: "26px !important",
+                        height: "26px !important",
+                        marginInlineEnd: '5px'
                       }}
                       color="white"
-                    />
+                    />}
+                    تسجيل دخول
                   </Button>
-                )}
               </Stack>
             </Stack>
           </LoginPaper>

@@ -26,23 +26,28 @@ const DialogDeleteEmployee = ({openDelete, handleClose, employee, setEmployees})
       .then((data) => {
         setLoading(false);
         if(!data.status){
-          const err = data.errors.email[0] || "لا يوجد اتصال بالانترنت"
-          enqueueSnackbar(err, {
-            variant: "error",
+          Object.keys(data.errors).slice(0, 3).forEach(e => {
+            enqueueSnackbar(data.errors[e][0], {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+          });
+        }else{
+          handleClose();
+          // remove employee from list
+          setEmployees(prev => prev.filter(e => e.id != employee.id))
+          enqueueSnackbar(data.message, {
+            variant: "success",
             autoHideDuration: 2000,
           });
-          throw new Error('error while deleting employee')
         }
-        handleClose();
-        // remove employee from list
-        setEmployees(prev => prev.filter(e => e.id != employee.id))
-        enqueueSnackbar(data.message, {
-          variant: "success",
-          autoHideDuration: 2000,
-        });
       })
       .catch((err) => {
         setLoading(false);
+        enqueueSnackbar("لا يوجد اتصال بالانترنت", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
         console.log(err);
       });
   };

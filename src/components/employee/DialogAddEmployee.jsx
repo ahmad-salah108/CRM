@@ -16,11 +16,12 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) => {
+const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
@@ -28,66 +29,77 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
   const { token } = useSelector((state) => state.user);
   const [image, setImage] = useState();
 
-  const handleEdit = () => {
+  const handleAdd = () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('user_id', employee.id);
-    formData.append('name', 'asdasd');
-    formData.append('email', watch("email"));
-    formData.append('password', watch("password"));
-    formData.append('phone_NO', watch("phone_NO"));
-    formData.append('ID_NO', watch("ID_NO"));
-    formData.append('job', watch("job"));
-    formData.append('image', image);
-    
-    fetch(`${process.env.REACT_APP_API_URL}/public/api/auth/employee/update`, {
+    formData.append("name", watch("name"));
+    formData.append("email", watch("email"));
+    formData.append("password", watch("password"));
+    formData.append("phone_NO", watch("phone_NO"));
+    formData.append("ID_NO", watch("ID_NO"));
+    formData.append("job", watch("job"));
+    formData.append("image", image);
+
+    fetch(`${process.env.REACT_APP_API_URL}/public/api/auth/employee/store`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`
       },
-      body: formData
+      body: formData,
     })
       .then((res) => res.json())
       .then((data) => {
         setLoading(false);
-        if(!data.status){
+        if (!data.status) {
           Object.keys(data.errors).slice(0, 3).forEach(e => {
             enqueueSnackbar(data.errors[e][0], {
               variant: "error",
               autoHideDuration: 2000,
             });
           });
-        }else{
+        } else {
           handleClose();
-          setEmployees(prev => prev.map(e => e.id == employee.id ? {
-            ...e,
-            name: watch('name'),
-            email: watch('email'),
-            phone_NO: watch('phone_NO'),
-            ID_NO: watch('ID_NO'),
-            job: watch('job'),
-            image: URL.createObjectURL(image)
-          } : e))
+          setEmployees((prev) =>[...prev, {
+            name: watch("name"),
+            email: watch("email"),
+            phone_NO: watch("phone_NO"),
+            ID_NO: watch("ID_NO"),
+            job: watch("job"),
+            image: URL.createObjectURL(image),
+          }]);
           enqueueSnackbar(data.message, {
             variant: "success",
             autoHideDuration: 2000,
           });
+          setTimeout(() => {
+            reserFields();
+          }, 1);
         }
       })
       .catch((err) => {
         setLoading(false);
-        enqueueSnackbar('لا يوجد اتصال بالانترنت', {
+        enqueueSnackbar("لا يوجد اتصال بالانترنت", {
           variant: "error",
           autoHideDuration: 2000,
         });
         console.log(err);
       });
-  };
+    };
 
+    const reserFields = ()=>{
+      setValue('name', '');
+      setValue('email', '');
+      setValue('password', '');
+      setValue('phone_NO', '');
+      setValue('job', '');
+      setValue('ID_NO', '');
+      setImage('')
+    }
+    
   return (
-    <Dialog open={openEdit} onClose={handleClose}>
-      <form onSubmit={handleSubmit(handleEdit)}>
-        <DialogTitle>تعديل الموظف</DialogTitle>
+    <Dialog open={openAdd} onClose={handleClose}>
+      <form onSubmit={handleSubmit(handleAdd)}>
+        <DialogTitle>إضافة موظف</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -96,7 +108,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="text"
             fullWidth
             variant="standard"
-            defaultValue={employee?.name}
             {...register("name")}
           />
           <TextField
@@ -105,7 +116,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="email"
             fullWidth
             variant="standard"
-            defaultValue={employee?.email}
             {...register("email")}
             required
           />
@@ -124,7 +134,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="text"
             fullWidth
             variant="standard"
-            defaultValue={employee?.phone_NO}
             {...register("phone_NO")}
           />
           <TextField
@@ -133,7 +142,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="text"
             fullWidth
             variant="standard"
-            defaultValue={employee?.job}
             {...register("job")}
           />
           <TextField
@@ -142,20 +150,47 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="text"
             fullWidth
             variant="standard"
-            defaultValue={employee?.ID_NO}
             {...register("ID_NO")}
           />
-          <Stack direction={'row'}>
-            <label style={{padding: '10px', cursor: 'pointer', width: 'fit-content'}}>
-              <AddPhotoAlternateIcon color="primary" fontSize="large"/>
-              <input type="file" onChange={(e)=>setImage(e.target.files[0])} style={{display: 'none'}} />
+          <Stack direction={"row"}>
+            <label
+              style={{
+                padding: "10px",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              <AddPhotoAlternateIcon color="primary" fontSize="large" />
+              <input
+                type="file"
+                onChange={(e) => setImage(e.target.files[0])}
+                style={{ display: "none" }}
+              />
             </label>
-            {image && <Avatar src={URL.createObjectURL(image)} sx={{width: '100px', height: '100px', borderRadius: '4px'}}/>}
+            {image && (
+              <Avatar
+                src={URL.createObjectURL(image)}
+                sx={{ width: "100px", height: "100px", borderRadius: "4px" }}
+              />
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button className={loading ? 'disabled' : ''} type="submit" variant="contained">
-            {loading && <CircularProgress color="white" sx={{width: '20px !important', height: '20px !important', marginInlineEnd: '5px'}}/>}
+          <Button
+            className={loading ? "disabled" : ""}
+            type="submit"
+            variant="contained"
+          >
+            {loading && (
+              <CircularProgress
+                color="white"
+                sx={{
+                  width: "20px !important",
+                  height: "20px !important",
+                  marginInlineEnd: "5px",
+                }}
+              />
+            )}
             موافق
           </Button>
           <Button onClick={handleClose}>إلغاء</Button>
@@ -165,4 +200,4 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
   );
 };
 
-export default DialogEditEmployee;
+export default DialogAddEmployee;

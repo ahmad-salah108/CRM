@@ -21,6 +21,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Outlet, useNavigate } from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 190;
 
@@ -224,7 +225,7 @@ const Layout = () => {
             </ListItem>
           </Tooltip>
           <Tooltip
-            title={open ? "" : "الإعدادات"}
+            title={open ? "" : "الملف الشخصي"}
             placement={theme.direction === "rtl" ? "left" : "right"}
           >
             <ListItem disablePadding sx={{ display: "block" }}>
@@ -242,10 +243,10 @@ const Layout = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <SettingsIcon />
+                  <AccountCircleIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={"الإعدادات"}
+                  primary={"الملف الشخصي"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
