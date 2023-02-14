@@ -7,6 +7,7 @@ import { prefixer } from 'stylis';
 import Layout from "./Layout";
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 import Home from "./pages/Home";
@@ -14,6 +15,7 @@ import Chat from "./pages/Chat";
 import CoversationBox from "./components/chat/CoversationBox";
 import Login from "./pages/Login";
 import Employee from "./pages/Employee";
+import { useSelector } from "react-redux";
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -44,52 +46,52 @@ const theme = createTheme({
   }
 });
 
-const page404 = <h1 style={{textAlign: 'center', marginTop: '250px'}}>404 | الصفحة غير موجودة</h1>;
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout/>,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: 'chat',
-        element: <Chat/>,
-        children: [
-          {
-            index: true,
-            element: <h1 style={{fontWeight: 'normal', textAlign: 'center', marginTop: '250px'}}>اختر محادثة</h1>
-          },
-          {
-            path: ':ChatId',
-            element: <CoversationBox/>
-          }
-        ]
-      },
-      {
-        path: 'employee',
-        element: <Employee/>
-      },
-      {
-        path: '*',
-        element: page404
-      }
-    ],
-  },
-  {
-    path: '/login',
-    element: <Login/>
-  },
-  {
-    path: '*',
-    element: page404
-  }
-]);
-
 function App() {
+  const { token } = useSelector(state => state.user)
+  const page404 = <h1 style={{textAlign: 'center', marginTop: '250px'}}>404 | الصفحة غير موجودة</h1>;
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: token ? <Layout /> : <Navigate to={"/login"} />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: 'chat',
+          element: <Chat/>,
+          children: [
+            {
+              index: true,
+              element: <h1 style={{fontWeight: 'normal', textAlign: 'center', marginTop: '250px'}}>اختر محادثة</h1>
+            },
+            {
+              path: ':ChatId',
+              element: <CoversationBox/>
+            }
+          ]
+        },
+        {
+          path: 'employee',
+          element: <Employee/>
+        },
+        {
+          path: '*',
+          element: page404
+        }
+      ],
+    },
+    {
+      path: '/login',
+      element: token ? <Navigate to={"/"} /> : <Login />
+    },
+    {
+      path: '*',
+      element: page404
+    }
+  ]);
+
   return (
     <ThemeProvider theme={theme}>
       <CacheProvider value={cacheRtl}>
