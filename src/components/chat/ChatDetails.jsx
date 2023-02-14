@@ -37,7 +37,7 @@ const ChatDetails = () => {
             autoHideDuration: 2000,
           });
           setLoading(false);
-          throw new Error("البريد الالكتروني او كلمة المرور غير صحيحة");
+          throw new Error("error while fetching conversations");
         }
         return res.json();
       })
@@ -67,7 +67,7 @@ const ChatDetails = () => {
         }}
       >
         {loading && <Stack direction={'row'} sx={{justifyContent: 'center', marginTop: '50px'}}><CircularProgress /></Stack>}
-        {!loading && conversations?.map((e) => <CustomerToChat data={e} />)}
+        {!loading && conversations?.map((e) => <CustomerToChat key={e.id} data={e} />)}
       </List>
     </Box>
   );

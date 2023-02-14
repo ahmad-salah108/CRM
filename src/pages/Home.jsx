@@ -4,8 +4,8 @@ import ProgressProvider from "../utils/ProgressProvider";
 import "react-circular-progressbar/dist/styles.css";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import { Box, Paper, Stack } from "@mui/material";
+import CardHome from "../components/home/CardHome";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 // data for chart
@@ -37,54 +37,15 @@ const data = {
 };
 
 const Home = () => {
+  
   return (
     <Stack direction={'column'} sx={{gap: '24px'}}>
       <Stack direction={'row'} sx={{justifyContent: 'center', flexWrap: 'wrap', rowGap: '20px', columnGap: '22px', padding: '24px'}} bgcolor="bgLight">
-        <Paper elevation={3} sx={{padding: '30px 52px'}}>
-          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-            <Stack direction={'column'}>
-              <Typography variant="h4">150</Typography>
-              <Typography color='cardText'>عدد المحادثات</Typography>
-            </Stack>
-            <ChatBubbleIcon fontSize="large" color='primary'/>
-          </Stack>
-        </Paper>
-        <Paper elevation={3} sx={{padding: '30px 52px'}}>
-          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-            <Stack direction={'column'}>
-              <Typography variant="h4">150</Typography>
-              <Typography color='cardText'>عدد المحادثات</Typography>
-            </Stack>
-            <ChatBubbleIcon fontSize="large" color='primary'/>
-          </Stack>
-        </Paper>
-        <Paper elevation={3} sx={{padding: '30px 52px'}}>
-          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-            <Stack direction={'column'}>
-              <Typography variant="h4">150</Typography>
-              <Typography color='cardText'>عدد المحادثات</Typography>
-            </Stack>
-            <ChatBubbleIcon fontSize="large" color='primary'/>
-          </Stack>
-        </Paper>
-        <Paper elevation={3} sx={{padding: '30px 52px'}}>
-          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-            <Stack direction={'column'}>
-              <Typography variant="h4">150</Typography>
-              <Typography color='cardText'>عدد المحادثات</Typography>
-            </Stack>
-            <ChatBubbleIcon fontSize="large" color='primary'/>
-          </Stack>
-        </Paper>
-        <Paper elevation={3} sx={{padding: '30px 52px'}}>
-          <Stack direction={'row'} sx={{justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-            <Stack direction={'column'}>
-              <Typography variant="h4">150</Typography>
-              <Typography color='cardText'>عدد المحادثات</Typography>
-            </Stack>
-            <ChatBubbleIcon fontSize="large" color='primary'/>
-          </Stack>
-        </Paper>
+        <CardHome/>
+        <CardHome/>
+        <CardHome/>
+        <CardHome/>
+        <CardHome/>
       </Stack>
       {/* <Box sx={{width: '100px'}}>
         <ProgressProvider valueStart={0} valueEnd={66}>

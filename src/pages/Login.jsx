@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import bg from "./../assets/login-background.png";
+import { useRef } from "react";
 
 const LoginPaper = styled(Paper)(() => ({
   position: "absolute",
@@ -23,7 +25,7 @@ const LoginPaper = styled(Paper)(() => ({
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "min(345px, 90%)",
-  height: "380px",
+  height: "450px",
   padding: "30px",
   display: "grid",
   placeItems: "center",
@@ -38,8 +40,8 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const errMessage = useRef();
 
   const handleLogin = (e) => {
     setLoading(true);
@@ -56,10 +58,7 @@ const Login = () => {
     })
       .then((res) => {
         if (!res.ok) {
-          enqueueSnackbar("البريد الالكتروني او كلمة المرور غير صحيحة", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
+          errMessage.current.textContent = 'البريد الالكتروني او كلمة المرور غير صحيحة';
           setLoading(false);
           throw new Error("البريد الالكتروني او كلمة المرور غير صحيحة");
         }
@@ -87,18 +86,26 @@ const Login = () => {
     >
       <form onSubmit={handleSubmit(handleLogin)}>
         <Box>
-          <LoginPaper elevation={3}>
+          <LoginPaper
+            elevation={3}
+            sx={{
+              backgroundImage: `url(${bg})`,
+              backgroundSize: "cover",
+              backgroundPositionY: "-200px",
+              backgroundPositionX: "-40px",
+              backgroundRepeat: "no-repeat"
+            }}
+          >
             <Stack
               direction={"column"}
               sx={{
-                gap: "40px",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 width: "100%",
                 height: "100%",
               }}
             >
-              <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <Typography variant="h5" sx={{ textAlign: "center", color: '#fff', marginTop: '30px' }}>
                 تسجيل دخول
               </Typography>
               <Stack direction={"column"} sx={{ gap: "23px", width: "100%" }}>
@@ -107,7 +114,9 @@ const Login = () => {
                   label="البريد الالكتروني"
                   fullWidth
                   size="small"
+                  type={'email'}
                   {...register("email")}
+                  required
                 />
                 <TextField
                   variant="outlined"
@@ -116,19 +125,28 @@ const Login = () => {
                   size="small"
                   type={"password"}
                   {...register("password")}
+                  required
                 />
-                {!loading && <Button type="submit" variant="contained" size="large">
-                  تسجيل دخول
-                </Button>}
-                {loading && <Button
-                  variant="contained"
-                  sx={{ pointerEvents: "none", opacity: "0.5" }}
-                >
-                  <CircularProgress
-                    sx={{ width: "30px !important", height: "30px !important" }}
-                    color="white"
-                  />
-                </Button>}
+                <Typography sx={{textAlign: 'center', fontSize: '14px'}} color={'error'} ref={errMessage}></Typography>
+                {!loading && (
+                  <Button type="submit" variant="contained" size="large">
+                    تسجيل دخول
+                  </Button>
+                )}
+                {loading && (
+                  <Button
+                    variant="contained"
+                    sx={{ pointerEvents: "none", opacity: "0.5" }}
+                  >
+                    <CircularProgress
+                      sx={{
+                        width: "30px !important",
+                        height: "30px !important",
+                      }}
+                      color="white"
+                    />
+                  </Button>
+                )}
               </Stack>
             </Stack>
           </LoginPaper>

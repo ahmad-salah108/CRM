@@ -1,14 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&display=swap");
 
-*{
-  font-family: 'Cairo', sans-serif !important;
+* {
+  font-family: "Cairo", sans-serif !important;
   margin: 0;
   padding: 0;
 }
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
-.active-chat li{
+.active-chat li {
   background-color: #ddd;
+}
+.card-animation {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slide 0.6s forwards;
+}
+@keyframes slide {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.disabled{
+  pointer-events: none;
+  opacity: 0.5;
 }

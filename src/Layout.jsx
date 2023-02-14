@@ -205,6 +205,7 @@ const Layout = () => {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                onClick={()=>navigate('/employee')}
               >
                 <ListItemIcon
                   sx={{
