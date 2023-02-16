@@ -12,6 +12,10 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { NavLink } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
+import ImageIcon from '@mui/icons-material/Image';
+import VideoFileIcon from '@mui/icons-material/VideoFile';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 const NewMessages = styled(Box)(({ theme }) => ({
   width: "18px",
@@ -35,7 +39,7 @@ const LastMessage = ({ msg, num }) => (
   </Stack>
 );
 
-const CustomerToChat = ({data}) => {
+const CustomerToChat = ({ data }) => {
   const theme = useTheme();
 
   const Title = ({ name, time }) => (
@@ -54,15 +58,38 @@ const CustomerToChat = ({data}) => {
     </Stack>
   );
 
+  let lastMsg =
+    data?.messages?.type == "chat"
+      ? data.messages.body
+      : data?.messages?.type == "image"
+      ? <Stack direction={'row'}><ImageIcon/><Typography>صورة</Typography></Stack>
+      : data?.messages?.type == "video"
+      ? <Stack direction={'row'}><VideoFileIcon/><Typography>فيديو</Typography></Stack>
+      : data?.messages?.type == "ptt"
+      ? <Stack direction={'row'}><KeyboardVoiceIcon/><Typography>رسالة صوتية</Typography></Stack>
+      : data?.messages?.type == "document"
+      ? <Stack direction={'row'}><InsertDriveFileIcon/><Typography>ملف</Typography></Stack>
+      : "";
+
   return (
-    <NavLink to={`/chat/${data.id}`} className={({isActive})=> isActive ? 'active-chat' : ''} style={{display: 'inline-block',marginBottom: '5px', width: '100%'}}>
-      <ListItem sx={{borderRadius: '4px'}}>
+    <NavLink
+      to={`/chat/${data.id}`}
+      className={({ isActive }) => (isActive ? "active-chat" : "")}
+      style={{ display: "inline-block", marginBottom: "5px", width: "100%" }}
+    >
+      <ListItem sx={{ borderRadius: "4px" }}>
         <ListItemAvatar>
-          <Avatar alt="محمد احمد" src="" sx={{ width: "46px", height: "46px" }} />
+          <Avatar
+            alt="محمد احمد"
+            src=""
+            sx={{ width: "46px", height: "46px" }}
+          />
         </ListItemAvatar>
         <ListItemText
-          primary={<Title name={data.name} time={new Date(data.last_time * 1000)} />}
-          secondary={<LastMessage msg={"الرسالة الاخيرة"} num={2} />}
+          primary={
+            <Title name={data.name} time={new Date(data.last_time * 1000)} />
+          }
+          secondary={<LastMessage msg={lastMsg} num={2} />}
         />
       </ListItem>
     </NavLink>

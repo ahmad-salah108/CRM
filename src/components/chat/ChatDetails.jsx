@@ -69,7 +69,7 @@ const ChatDetails = () => {
         }}
       >
         {loading && <Stack direction={'row'} sx={{justifyContent: 'center', marginTop: '50px'}}><CircularProgress /></Stack>}
-        {!loading && conversations?.map((e) => <CustomerToChat key={e.id} data={e} />)}
+        {!loading && (conversations.length > 0 ? conversations.map((e) => <CustomerToChat key={e.id} data={e} />) : conversations.length == 0 ? <Typography variant="h5" color='a4' sx={{textAlign: 'center'}}>لا يوجد محادثات</Typography> : '')}
       </List>
     </Box>
   );

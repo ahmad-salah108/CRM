@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@mui/material";
+import { Avatar, Box, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
@@ -21,7 +21,13 @@ import ForumIcon from "@mui/icons-material/Forum";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Outlet, useNavigate } from "react-router-dom";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useDispatch, useSelector } from "react-redux";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logout } from "./redux/userSilce";
+import { useSnackbar } from "notistack";
+import DialogLogout from "./components/DialogLogout";
 
 const drawerWidth = 190;
 
@@ -94,6 +100,10 @@ const Layout = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { token, currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -103,26 +113,104 @@ const Layout = () => {
     setOpen(false);
   };
 
+  // profile menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const userLogout = ()=>{
+    fetch(`${process.env.REACT_APP_API_URL}/public/api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then((data) => {
+      if(!data.status){
+        Object.keys(data.errors).slice(0, 3).forEach(e => {
+          enqueueSnackbar(data.errors[e][0], {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        });
+      }else{
+        navigate('/login');
+        dispatch(logout());
+      }
+    })
+    .catch((err) => {
+      enqueueSnackbar("لا يوجد اتصال بالانترنت", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+      console.log(err);
+    });
+  }
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
+        <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
+          <Stack direction={"row"}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              إدارة خدمة العملاء
+            </Typography>
+          </Stack>
+          <Stack
+            direction={"row"}
+            sx={{ alignItems: "center", gap: "5px", cursor: "pointer" }}
+            id="basic-button"
+            aria-controls={openMenu ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? "true" : undefined}
+            onClick={handleOpenMenu}
+          >
+            <Avatar src={currentUser?.image} alt="الصورة الشخصية" />
+            <Typography>{currentUser?.name}</Typography>
+            <ExpandMoreIcon />
+          </Stack>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleCloseMenu}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
             }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            إدارة خدمة العملاء
-          </Typography>
+            <MenuItem onClick={()=>{navigate('/profile'); handleCloseMenu()}}>
+              <ListItemIcon>
+                <AccountCircleIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>الملف الشخصي</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={()=>{setOpenLogoutDialog(true);}}>
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>تسجيل خروج</ListItemText>
+            </MenuItem>
+            <DialogLogout open={openLogoutDialog} handleClose={()=>{setOpenLogoutDialog(false); handleCloseMenu();}} userLogout={userLogout}/>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -148,7 +236,7 @@ const Layout = () => {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={()=>navigate('/')}
+                onClick={() => navigate("/")}
               >
                 <ListItemIcon
                   sx={{
@@ -177,7 +265,7 @@ const Layout = () => {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={()=>navigate('/chat')}
+                onClick={() => navigate("/chat")}
               >
                 <ListItemIcon
                   sx={{
@@ -206,7 +294,7 @@ const Layout = () => {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
-                onClick={()=>navigate('/employee')}
+                onClick={() => navigate("/employee")}
               >
                 <ListItemIcon
                   sx={{
@@ -219,34 +307,6 @@ const Layout = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={"الموظفين"}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Tooltip>
-          <Tooltip
-            title={open ? "" : "الملف الشخصي"}
-            placement={theme.direction === "rtl" ? "left" : "right"}
-          >
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"الملف الشخصي"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

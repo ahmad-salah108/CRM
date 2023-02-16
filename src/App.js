@@ -16,6 +16,7 @@ import CoversationBox from "./components/chat/CoversationBox";
 import Login from "./pages/Login";
 import Employee from "./pages/Employee";
 import { useSelector } from "react-redux";
+import Profile from "./pages/Profile";
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -42,6 +43,7 @@ const theme = createTheme({
     bgLight: 'rgb(191, 172, 226, 0.5)',
     primaryLight: 'rgb(100, 92, 187, 0.3)',
     ef: '#efefef',
+    a4: '#a4a4a4',
     fontLight: 'rgb(33, 37, 41, 0.75)'
   }
 });
@@ -75,6 +77,10 @@ function App() {
         {
           path: 'employee',
           element: <Employee/>
+        },
+        {
+          path: 'profile',
+          element: <Profile/>
         },
         {
           path: '*',
