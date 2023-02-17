@@ -14,6 +14,7 @@ const ConversationBody = () => {
   const { token } = useSelector((state) => state.user);
   const [messages, setMessages] = useState([]);
   const [conversationData, setConversationData] = useState();
+  const [arrivalMessage, setArrivalMessage] = useState();
   const {ChatId} = useParams()
   console.log(messages)
   console.log(conversationData)
@@ -79,9 +80,15 @@ const ConversationBody = () => {
     });
     const channel = pusher.subscribe('Staff-Management');
     channel.bind("message-sent",(data)=>{
-        console.log(data)
+        setArrivalMessage(data)
     });
   },[])
+
+  useEffect(()=>{
+    if(arrivalMessage?.message.conversation_id == ChatId){
+      setMessages(prev => [arrivalMessage?.message, ...prev])
+    }
+  },[arrivalMessage])
 
   return (
     <Box
@@ -101,7 +108,7 @@ const ConversationBody = () => {
     >
       {
         <InfiniteScroll
-          dataLength={messages.length}
+          dataLength={messages?.length}
           inverse={true}
           hasMore={true}
           scrollableTarget="scrollableDiv"
