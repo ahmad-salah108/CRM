@@ -16,6 +16,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import VideoFileIcon from '@mui/icons-material/VideoFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import NoteIcon from '@mui/icons-material/Note';
 
 const NewMessages = styled(Box)(({ theme }) => ({
   width: "18px",
@@ -69,6 +70,8 @@ const CustomerToChat = ({ data }) => {
       ? <Stack direction={'row'}><KeyboardVoiceIcon/><Typography>رسالة صوتية</Typography></Stack>
       : data?.messages?.type == "document"
       ? <Stack direction={'row'}><InsertDriveFileIcon/><Typography>ملف</Typography></Stack>
+      : data?.messages?.type == "sticker"
+      ? <Stack direction={'row'}><NoteIcon/><Typography>ملصق</Typography></Stack>
       : "";
 
   return (

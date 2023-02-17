@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
 
 const ConversationFooter = () => {
   const fileInput = useRef();
@@ -13,6 +14,7 @@ const ConversationFooter = () => {
   const { ChatId } = useParams();
   const { token } = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
+  const [fileToSend, setFileToSend] = useState();
   const {
     register,
     handleSubmit,
@@ -67,32 +69,54 @@ const ConversationFooter = () => {
   };
 
   return (
-    <Box sx={{ padding: "3px 8px", background: theme.palette.eee }}>
-      <Stack direction={"row"}>
-        <input type="file" ref={fileInput} style={{ display: "none" }} />
-        <IconButton color="primary" onClick={() => fileInput.current.click()}>
-          <AttachFileIcon />
-        </IconButton>
-        <form
-          onSubmit={handleSubmit(handleMessage)}
-          style={{ display: "flex", flexGrow: "1" }}
-        >
+    <Box sx={{position: 'relative'}}>
+      {fileToSend && (
+        <Stack direction={"column"} sx={{position: 'absolute', bottom: '46px', left: '0', padding: '15px', borderRadius: '4px', maxHeight: '180px', maxWidth: '180px'}} bgcolor='eee'>
+          {fileToSend.type.split("/")[0] == "image" ? (
+            <img
+              src={URL.createObjectURL(fileToSend)}
+              style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: '4px' }}
+            />
+          ) : (
+            ""
+          )}
+        </Stack>
+      )}
+      <Box sx={{ padding: "3px 8px", background: theme.palette.eee }}>
+        <Stack direction={"row"}>
           <input
-            type="text"
-            placeholder="اكتب رسالة"
-            style={{
-              flexGrow: "1",
-              border: "none",
-              outline: "none",
-              background: "inherit",
+            type="file"
+            ref={fileInput}
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setFileToSend(e.target.files[0]);
             }}
-            {...register("message")}
           />
-          <IconButton type="submit" color="primary">
-            <SendIcon sx={{ transform: "rotate(180deg)" }} />
+          <IconButton color="primary" onClick={() => fileInput.current.click()}>
+            <AttachFileIcon />
           </IconButton>
-        </form>
-      </Stack>
+          <form
+            onSubmit={handleSubmit(handleMessage)}
+            style={{ display: "flex", flexGrow: "1" }}
+          >
+            <input
+              type="text"
+              placeholder="اكتب رسالة"
+              autoComplete="off"
+              style={{
+                flexGrow: "1",
+                border: "none",
+                outline: "none",
+                background: "inherit",
+              }}
+              {...register("message")}
+            />
+            <IconButton type="submit" color="primary">
+              <SendIcon sx={{ transform: "rotate(180deg)" }} />
+            </IconButton>
+          </form>
+        </Stack>
+      </Box>
     </Box>
   );
 };

@@ -1,57 +1,14 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "./Message";
+import Pusher from 'pusher-js';
 
 const ConversationBody = () => {
-  const msgs = [
-    {
-      id: 1,
-      msg: "محمد",
-      you: true,
-      time: new Date(),
-    },
-    {
-      id: 2,
-      msg: "علي",
-      you: false,
-      time: new Date(),
-    },
-    {
-      id: 3,
-      msg: "مرحبا",
-      you: true,
-      time: new Date(),
-    },
-    {
-      id: 4,
-      msg: "اختبار",
-      you: false,
-      time: new Date(),
-    },
-    {
-      id: 5,
-      msg: "اختبار",
-      you: false,
-      time: new Date(),
-    },
-    {
-      id: 6,
-      msg: "البرمجة هي عملية كتابة تعليمات وتوجيه أوامر لجهاز الحاسوب أو أي جهاز آخر مثل قارئات أقراص الدي في دي أو أجهزة استقبال الصوت والصورة في نظم الاتصالات الحديثة، لتوجيه هذا الجهاز وإعلامه بكيفية التعامل مع البيانات أو كيفية تنفيذ سلسلة من الأعمال المطلوبة تسمى خوارزمية.",
-      you: true,
-      time: new Date(),
-    },
-    {
-      id: 7,
-      msg: "ا والصورة في نظم الاتصالات الحديثة، لتوجيه هذا الجهاز وإعلامه بكيفية التعامل مع البيانات أو كيفية تنفيذ سلسلة من الأعمال المطلوبة تسمى خوارزمية.",
-      you: false,
-      time: new Date(1676220486 * 1000),
-    },
-  ];
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { token } = useSelector((state) => state.user);
@@ -60,9 +17,12 @@ const ConversationBody = () => {
   const {ChatId} = useParams()
   console.log(messages)
   console.log(conversationData)
+  const chatLoading = useRef();
 
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
     if(!nextLink){
+      console.log('asd')
+      chatLoading.current.style.display = 'none';
       return;
     }
     setLoading(true);
@@ -108,8 +68,20 @@ const ConversationBody = () => {
   }
 
   useEffect(() => {
+    setMessages([])
+    setConversationData('')
     fetchMessages();
-  }, []);
+  }, [ChatId]);
+
+  useEffect(()=>{
+    const pusher = new Pusher("baba382db1e49c335622", {
+      cluster: "mt1",
+    });
+    const channel = pusher.subscribe('Staff-Management');
+    channel.bind("message-sent",(data)=>{
+        console.log(data)
+    });
+  },[])
 
   return (
     <Box
@@ -121,15 +93,20 @@ const ConversationBody = () => {
         paddingX: "10px",
         paddingTop: "16px",
         height: "calc(100vh - 218px)",
+        '& .infinite-scroll-component ': {
+          overflow: 'initial'
+        }
       }}
       id="scrollableDiv"
     >
       {
         <InfiniteScroll
-          dataLength={msgs.length}
+          dataLength={messages.length}
           inverse={true}
           hasMore={true}
           scrollableTarget="scrollableDiv"
+          style={{ display: 'flex', flexDirection: 'column-reverse' }}
+          loader={<CircularProgress ref={chatLoading} id="chatLoading" sx={{margin: '15px auto'}}/>}
           next={() => {
             fetchMessages(conversationData.messages.next_page_url)
           }}

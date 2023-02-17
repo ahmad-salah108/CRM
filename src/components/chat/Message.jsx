@@ -13,6 +13,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import ReactTimeAgo from "react-time-ago";
 import ReadMoreReact from "read-more-react/dist/components/ReadMoreReact";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 const BoxTime = styled(Box)({
   color: "#A4A4A4",
@@ -57,39 +58,69 @@ export default function Message({ data, conversationData }) {
           }}
         >
           <>
-            <MessageText
-              sx={{
-                maxWidth: "450px",
-                "& .read-more-button": {
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                },
-              }}
-            >
-              {data.type == "image" ? (
-                <a
-                  href={data?.media}
-                  target="_blank"
-                  style={{ display: "grid", placeItems: "center" }}
-                >
-                  <img
-                    src={data?.media}
-                    style={{ width: "100%", borderRadius: "12px", maxHeight: '244px' }}
+            {data.type == "ptt" && (
+              <audio controls>
+                <source src={data?.media} />
+              </audio>
+            )}
+            {data.type != "ptt" && (
+              <MessageText
+                sx={{
+                  maxWidth: "450px",
+                  "& .read-more-button": {
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  },
+                }}
+              >
+                {data.type == "image" || data.type == "sticker" ? (
+                  <a
+                    href={data?.media}
+                    target="_blank"
+                    style={{ display: "grid", placeItems: "center" }}
+                  >
+                    <img
+                      src={data?.media}
+                      style={{
+                        width: "100%",
+                        borderRadius: "12px",
+                        maxHeight: "244px",
+                      }}
+                    />
+                  </a>
+                ) : data.type == "video" ? (
+                  <video
+                    controls
+                    width="300"
+                    height={"300"}
+                    style={{ borderRadius: "12px" }}
+                  >
+                    <source src={data?.media} />
+                  </video>
+                ) : data.type == "document" ? (
+                  <a
+                    href={data?.media}
+                    target="_blank"
+                    style={{
+                      display: "grid",
+                      placeItems: "center",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    <Stack direction={"row"} sx={{ gap: "5px" }}>
+                      {data?.body} <InsertDriveFileIcon />
+                    </Stack>
+                  </a>
+                ) : (
+                  <ReadMoreReact
+                    text={data.body}
+                    min={80}
+                    max={200}
+                    readMoreText={"اقرأ المزيد"}
                   />
-                </a>
-              ) : 
-                data.type == "video" ? <video controls width='300' height={'300'} style={{borderRadius: '12px'}}>
-                  <source src={data?.media}/>
-                </video>
-                : ''
-              }
-              {/* <ReadMoreReact
-                text={message || ""}
-                min={80}
-                max={200}
-                readMoreText={"اقرأ المزيد"}
-              /> */}
-            </MessageText>
+                )}
+              </MessageText>
+            )}
           </>
           {data.fromMe == "0" && (
             <Avatar src={conversationData?.image} alt={"صورة شخصية"} />

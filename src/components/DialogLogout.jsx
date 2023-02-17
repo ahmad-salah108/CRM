@@ -19,7 +19,7 @@ const DialogLogout = ({open, handleClose, userLogout}) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>إلغاء</Button>
-        <Button onClick={()=>{userLogout(); handleClose()}} autoFocus>
+        <Button onClick={()=>{userLogout(); handleClose()}} autoFocus variant="contained">
           موافق
         </Button>
       </DialogActions>
