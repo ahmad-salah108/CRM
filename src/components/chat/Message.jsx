@@ -20,15 +20,17 @@ const BoxTime = styled(Box)({
   alignItems: "center",
 });
 
-export default function Message({ message, you, time }) {
+export default function Message({ data, conversationData }) {
   const MessageText = styled(Typography)(({ theme }) => ({
     // ...(lang == 'en' ? {
-    //   borderRadius: you ? "12px 12px 12px 0px" : "12px 12px 0px 12px",
+    //   borderRadius: data.fromMe == '1' ? "12px 12px 12px 0px" : "12px 12px 0px 12px",
     // } : {
-    borderRadius: you ? "12px 12px 12px 0px" : "12px 12px 0px 12px",
+    borderRadius:
+      data.fromMe == "1" ? "12px 12px 12px 0px" : "12px 12px 0px 12px",
     // }),
-    backgroundColor: you ? theme.palette.primary.main : theme.palette.eee,
-    color: you ? "#fff" : "",
+    backgroundColor:
+      data.fromMe == "1" ? theme.palette.primary.main : theme.palette.eee,
+    color: data.fromMe == "1" ? "#fff" : "",
     width: "fit-content",
     fontSize: "16px",
     fontWieght: "400",
@@ -41,7 +43,7 @@ export default function Message({ message, you, time }) {
       sx={{
         marginBottom: "16px",
         display: "flex",
-        justifyContent: you ? "flex-start" : "flex-end",
+        justifyContent: data.fromMe == "1" ? "flex-start" : "flex-end",
       }}
     >
       <Box>
@@ -58,25 +60,44 @@ export default function Message({ message, you, time }) {
             <MessageText
               sx={{
                 maxWidth: "450px",
-                '& .read-more-button': {
-                  textDecoration: 'underline',
-                  cursor: 'pointer'
-                }
+                "& .read-more-button": {
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                },
               }}
             >
-              <ReadMoreReact
+              {data.type == "image" ? (
+                <a
+                  href={data?.media}
+                  target="_blank"
+                  style={{ display: "grid", placeItems: "center" }}
+                >
+                  <img
+                    src={data?.media}
+                    style={{ width: "100%", borderRadius: "12px", maxHeight: '244px' }}
+                  />
+                </a>
+              ) : 
+                data.type == "video" ? <video controls width='300' height={'300'} style={{borderRadius: '12px'}}>
+                  <source src={data?.media}/>
+                </video>
+                : ''
+              }
+              {/* <ReadMoreReact
                 text={message || ""}
                 min={80}
                 max={200}
                 readMoreText={"اقرأ المزيد"}
-              />
+              /> */}
             </MessageText>
           </>
-          {!you && <Avatar src={""} alt={"asd"} />}
+          {data.fromMe == "0" && (
+            <Avatar src={conversationData?.image} alt={"صورة شخصية"} />
+          )}
         </Box>
         <BoxTime sx={{ marginTop: "2px" }}>
           <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-            <ReactTimeAgo date={time} locale="ar" />
+            <ReactTimeAgo date={data.created_at} locale="ar" />
           </Typography>
         </BoxTime>
       </Box>

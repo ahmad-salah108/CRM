@@ -60,6 +60,7 @@ const ConversationBody = () => {
   const {ChatId} = useParams()
   console.log(messages)
   console.log(conversationData)
+
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
     if(!nextLink){
       return;
@@ -133,9 +134,9 @@ const ConversationBody = () => {
             fetchMessages(conversationData.messages.next_page_url)
           }}
         >
-          {msgs.length > 0 &&
-            msgs.map(({ msg, you, time, id }) => {
-              return <Message key={id} you={you} time={time} message={msg} />;
+          {messages.length > 0 &&
+            messages.map(data => {
+              return <Message key={data.id} data={data} conversationData={conversationData.conversation} />;
             })}
         </InfiniteScroll>
       }
