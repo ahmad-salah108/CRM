@@ -19,6 +19,7 @@ const ConversationBody = () => {
   console.log(messages)
   console.log(conversationData)
   const chatLoading = useRef();
+  const divScroll = useRef();
 
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
     if(!nextLink){
@@ -80,13 +81,15 @@ const ConversationBody = () => {
     });
     const channel = pusher.subscribe('Staff-Management');
     channel.bind("message-sent",(data)=>{
+        console.log(data)
         setArrivalMessage(data)
     });
   },[])
 
   useEffect(()=>{
     if(arrivalMessage?.message.conversation_id == ChatId){
-      setMessages(prev => [arrivalMessage?.message, ...prev])
+      setMessages(prev => [arrivalMessage?.message, ...prev]);
+      divScroll.current.scrollTop = divScroll.current.scrollHeight;
     }
   },[arrivalMessage])
 
@@ -105,6 +108,7 @@ const ConversationBody = () => {
         }
       }}
       id="scrollableDiv"
+      ref={divScroll}
     >
       {
         <InfiniteScroll
