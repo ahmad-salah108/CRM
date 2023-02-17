@@ -154,11 +154,11 @@ const Layout = () => {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", overflow: 'auto' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
-          <Stack direction={"row"}>
+          <Stack direction={"row"} sx={{alignItems: 'center'}}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
