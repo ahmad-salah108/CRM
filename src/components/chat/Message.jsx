@@ -8,6 +8,7 @@ import {
   Grid,
   Dialog,
   Stack,
+  useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
@@ -22,6 +23,8 @@ const BoxTime = styled(Box)({
 });
 
 export default function Message({ data, conversationData }) {
+  const theme = useTheme()
+
   const MessageText = styled(Typography)(({ theme }) => ({
     // ...(lang == 'en' ? {
     //   borderRadius: data.fromMe == '1' ? "12px 12px 12px 0px" : "12px 12px 0px 12px",
@@ -74,29 +77,45 @@ export default function Message({ data, conversationData }) {
                 }}
               >
                 {data.type == "image" || data.type == "sticker" ? (
-                  <a
-                    href={data?.media}
-                    target="_blank"
-                    style={{ display: "grid", placeItems: "center" }}
-                  >
-                    <img
-                      src={data?.media}
-                      style={{
-                        width: "100%",
-                        borderRadius: "12px",
-                        maxHeight: "244px",
-                      }}
+                  <Stack direction={'column'}>
+                    <a
+                      href={data?.media}
+                      target="_blank"
+                      style={{ display: "grid", placeItems: "center" }}
+                    >
+                      <img
+                        src={data?.media}
+                        style={{
+                          width: "100%",
+                          borderRadius: "12px",
+                          maxHeight: "244px",
+                        }}
+                      />
+                    </a>
+                    <ReadMoreReact
+                      text={data?.body}
+                      min={80}
+                      max={200}
+                      readMoreText={"اقرأ المزيد"}
                     />
-                  </a>
+                  </Stack>
                 ) : data.type == "video" ? (
-                  <video
-                    controls
-                    width="300"
-                    height={"300"}
-                    style={{ borderRadius: "12px" }}
-                  >
-                    <source src={data?.media} />
-                  </video>
+                  <Stack direction={'column'}>
+                    <video
+                      controls
+                      width="300"
+                      height={"300"}
+                      style={{ borderRadius: "12px", background: theme.palette.black }}
+                    >
+                      <source src={data?.media} />
+                    </video>
+                    <ReadMoreReact
+                      text={data?.body}
+                      min={80}
+                      max={200}
+                      readMoreText={"اقرأ المزيد"}
+                    />
+                  </Stack>
                 ) : data.type == "document" ? (
                   <a
                     href={data?.media}

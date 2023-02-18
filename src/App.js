@@ -44,7 +44,8 @@ const theme = createTheme({
     primaryLight: 'rgb(100, 92, 187, 0.3)',
     ef: '#efefef',
     a4: '#a4a4a4',
-    fontLight: 'rgb(33, 37, 41, 0.75)'
+    fontLight: 'rgb(33, 37, 41, 0.75)',
+    black: '#000'
   }
 });
 

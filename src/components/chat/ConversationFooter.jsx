@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Stack, useTheme } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import React, { useRef } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import { Close } from "@mui/icons-material";
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 const ConversationFooter = () => {
   const fileInput = useRef();
@@ -15,6 +17,7 @@ const ConversationFooter = () => {
   const { token } = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
   const [fileToSend, setFileToSend] = useState();
+  console.log(fileToSend)
   const {
     register,
     handleSubmit,
@@ -68,17 +71,267 @@ const ConversationFooter = () => {
     }
   };
 
+  const handleMessageImage = () => {
+    const file = fileToSend;
+    const caption = watch("messageImage");
+    setFileToSend("");
+    setValue("messageImage", "");
+    fileInput.current.value = null;
+
+    const formData = new FormData();
+    formData.append("conversation_id", ChatId);
+    formData.append("image", file);
+    formData.append("caption", caption);
+
+    fetch(
+      `${process.env.REACT_APP_API_URL}/public/api/auth/messages/send_image`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.status) {
+          Object.keys(data.errors)
+            .slice(0, 3)
+            .forEach((e) => {
+              enqueueSnackbar(data.errors[e][0], {
+                variant: "error",
+                autoHideDuration: 2000,
+              });
+            });
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar("لا يوجد اتصال بالانترنت", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+        console.log(err);
+      });
+  };
+
+  const handleMessageVideo = () => {
+    const file = fileToSend;
+    const caption = watch("messageVideo");
+    setFileToSend("");
+    setValue("messageVideo", "");
+    fileInput.current.value = null;
+
+    const formData = new FormData();
+    formData.append("conversation_id", ChatId);
+    formData.append("video", file);
+    formData.append("caption", caption);
+
+    fetch(
+      `${process.env.REACT_APP_API_URL}/public/api/auth/messages/send_video`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.status) {
+          enqueueSnackbar("لا يجب أن يزيد حجم الفيديو عن 16.384 ميجابايت", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar("لا يوجد اتصال بالانترنت", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+        console.log(err);
+      });
+  };
+
+  const handleMessageDocument = () => {
+    const file = fileToSend;
+    const caption = watch("messageDocument");
+    setFileToSend("");
+    setValue("messageDocument", "");
+    fileInput.current.value = null;
+
+    const formData = new FormData();
+    formData.append("conversation_id", ChatId);
+    formData.append("document", file);
+    formData.append("caption", caption);
+
+    fetch(
+      `${process.env.REACT_APP_API_URL}/public/api/auth/messages/send_document`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.status) {
+          enqueueSnackbar("حجم الملف تجاوز الحد المسموح", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar("حجم الملف تجاوز الحد المسموح", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+        console.log(err);
+      });
+  };
+
   return (
-    <Box sx={{position: 'relative'}}>
+    <Box sx={{ position: "relative" }}>
       {fileToSend && (
-        <Stack direction={"column"} sx={{position: 'absolute', bottom: '46px', left: '0', padding: '15px', borderRadius: '4px', maxHeight: '180px', maxWidth: '180px'}} bgcolor='eee'>
+        <Stack
+          direction={"column"}
+          sx={{
+            position: "absolute",
+            bottom: "50px",
+            left: "4px",
+            padding: "8px 15px 5px 15px",
+            borderRadius: "4px",
+            width: "500px",
+            maxWidth: "500px",
+          }}
+          bgcolor="eee"
+        >
           {fileToSend.type.split("/")[0] == "image" ? (
-            <img
-              src={URL.createObjectURL(fileToSend)}
-              style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: '4px' }}
-            />
+            <form
+              onSubmit={handleSubmit(handleMessageImage)}
+              style={{ width: "100%" }}
+            >
+              <IconButton
+                sx={{ marginBottom: "5px" }}
+                onClick={() => {
+                  setFileToSend("");
+                  fileInput.current.value = null;
+                }}
+              >
+                <Close />
+              </IconButton>
+              <img
+                src={URL.createObjectURL(fileToSend)}
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "contain",
+                  borderRadius: "4px",
+                }}
+              />
+              <Stack direction="row" sx={{ width: "100%" }}>
+                <input
+                  type="text"
+                  placeholder="اكتب رسالة فرعية"
+                  autoComplete="off"
+                  style={{
+                    flexGrow: "1",
+                    border: "none",
+                    outline: "none",
+                    background: "inherit",
+                  }}
+                  {...register("messageImage")}
+                />
+                <IconButton type="submit" color="primary">
+                  <SendIcon sx={{ transform: "rotate(180deg)" }} />
+                </IconButton>
+              </Stack>
+            </form>
+          ) : fileToSend.type.split("/")[0] == "video" ? (
+            <form
+              onSubmit={handleSubmit(handleMessageVideo)}
+              style={{ width: "100%" }}
+            >
+              <IconButton
+                sx={{ marginBottom: "5px" }}
+                onClick={() => {
+                  setFileToSend();
+                  fileInput.current.value = null;
+                }}
+              >
+                <Close />
+              </IconButton>
+              <video
+                controls
+                style={{ borderRadius: "12px", width: "100%", height: "250px" }}
+              >
+                <source src={URL.createObjectURL(fileToSend)} />
+              </video>
+              <Stack direction="row" sx={{ width: "100%" }}>
+                <input
+                  type="text"
+                  placeholder="اكتب رسالة فرعية"
+                  autoComplete="off"
+                  style={{
+                    flexGrow: "1",
+                    border: "none",
+                    outline: "none",
+                    background: "inherit",
+                  }}
+                  {...register("messageVideo")}
+                />
+                <IconButton type="submit" color="primary">
+                  <SendIcon sx={{ transform: "rotate(180deg)" }} />
+                </IconButton>
+              </Stack>
+            </form>
           ) : (
-            ""
+            <form
+              onSubmit={handleSubmit(handleMessageDocument)}
+              style={{ width: "100%" }}
+            >
+              <IconButton
+                sx={{ marginBottom: "5px" }}
+                onClick={() => {
+                  setFileToSend();
+                  fileInput.current.value = null;
+                }}
+              >
+                <Close />
+              </IconButton>
+              <Stack direction='row'>
+                <InsertDriveFileIcon/>
+                <Typography>{fileToSend.name}</Typography>
+              </Stack>
+              <Stack direction="row" sx={{ width: "100%" }}>
+                <input
+                  type="text"
+                  placeholder="اكتب رسالة فرعية"
+                  autoComplete="off"
+                  style={{
+                    flexGrow: "1",
+                    border: "none",
+                    outline: "none",
+                    background: "inherit",
+                  }}
+                  {...register("messageDocument")}
+                />
+                <IconButton type="submit" color="primary">
+                  <SendIcon sx={{ transform: "rotate(180deg)" }} />
+                </IconButton>
+              </Stack>
+            </form>
           )}
         </Stack>
       )}
@@ -90,6 +343,7 @@ const ConversationFooter = () => {
             style={{ display: "none" }}
             onChange={(e) => {
               setFileToSend(e.target.files[0]);
+              console.log(e);
             }}
           />
           <IconButton color="primary" onClick={() => fileInput.current.click()}>

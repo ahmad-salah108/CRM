@@ -28,6 +28,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from "./redux/userSilce";
 import { useSnackbar } from "notistack";
 import DialogLogout from "./components/DialogLogout";
+import logo from './assets/logo.svg'
 
 const drawerWidth = 190;
 
@@ -165,7 +166,7 @@ const Layout = () => {
               onClick={handleDrawerOpen}
               edge="start"
               sx={{
-                marginRight: 5,
+                // marginRight: 5,
                 ...(open && { display: "none" }),
               }}
             >
@@ -214,7 +215,8 @@ const Layout = () => {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+        <DrawerHeader sx={{justifyContent: 'space-between', alignItems: 'center'}}>
+          <img src={logo} style={{objectFit: 'contain', marginRight: '6px'}} width={30} height={30}/>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />

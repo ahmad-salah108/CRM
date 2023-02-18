@@ -89,7 +89,9 @@ const ConversationBody = () => {
   useEffect(()=>{
     if(arrivalMessage?.message.conversation_id == ChatId){
       setMessages(prev => [arrivalMessage?.message, ...prev]);
-      divScroll.current.scrollTop = divScroll.current.scrollHeight;
+      setTimeout(() => {
+        divScroll.current.scrollTop = divScroll.current.scrollHeight;
+      }, 1);
     }
   },[arrivalMessage])
 
