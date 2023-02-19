@@ -16,7 +16,6 @@ const ConversationBody = ({ setConversation }) => {
   const [conversationData, setConversationData] = useState();
   const [arrivalMessage, setArrivalMessage] = useState();
   const {ChatId} = useParams()
-  const chatLoading = useRef();
   const divScroll = useRef();
 
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
@@ -81,9 +80,6 @@ const ConversationBody = ({ setConversation }) => {
         console.log(data)
         setArrivalMessage(data)
     });
-    channel.bind("conversation-created",(data)=>{
-        console.log(data)
-    });
   },[])
 
   useEffect(()=>{
@@ -127,7 +123,7 @@ const ConversationBody = ({ setConversation }) => {
             messages.map(data => {
               return <Message key={data.id} data={data} conversationData={conversationData.conversation} />;
             })}
-            {loading && <CircularProgress ref={chatLoading} id="chatLoading" sx={{margin: '15px auto'}}/>}
+            {loading && <CircularProgress sx={{margin: '15px auto'}}/>}
         </InfiniteScroll>
       }
     </Box>

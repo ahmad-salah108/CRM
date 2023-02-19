@@ -119,7 +119,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             variant="standard"
             sx={{marginBottom: '10px'}}
             {...register("password")}
-            required
           />
           <TextField
             margin="dense"
