@@ -19,7 +19,6 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import ForumIcon from "@mui/icons-material/Forum";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { Outlet, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
@@ -166,7 +165,7 @@ const Layout = () => {
               onClick={handleDrawerOpen}
               edge="start"
               sx={{
-                // marginRight: 5,
+                marginRight: 5,
                 ...(open && { display: "none" }),
               }}
             >

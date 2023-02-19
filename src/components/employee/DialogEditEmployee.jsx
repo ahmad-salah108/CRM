@@ -66,7 +66,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             phone_NO: watch('phone_NO'),
             ID_NO: watch('ID_NO'),
             job: watch('job'),
-            image: URL.createObjectURL(image)
+            ...(image && {image: URL.createObjectURL(image)})
           } : e))
           enqueueSnackbar(data.message, {
             variant: "success",
@@ -97,6 +97,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             fullWidth
             variant="standard"
             defaultValue={employee?.name}
+            sx={{marginBottom: '10px'}}
             {...register("name")}
           />
           <TextField
@@ -106,6 +107,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             fullWidth
             variant="standard"
             defaultValue={employee?.email}
+            sx={{marginBottom: '10px'}}
             {...register("email")}
             required
           />
@@ -115,6 +117,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             type="password"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("password")}
             required
           />
@@ -125,6 +128,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             fullWidth
             variant="standard"
             defaultValue={employee?.phone_NO}
+            sx={{marginBottom: '10px'}}
             {...register("phone_NO")}
           />
           <TextField
@@ -134,6 +138,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             fullWidth
             variant="standard"
             defaultValue={employee?.job}
+            sx={{marginBottom: '10px'}}
             {...register("job")}
           />
           <TextField
@@ -143,6 +148,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             fullWidth
             variant="standard"
             defaultValue={employee?.ID_NO}
+            sx={{marginBottom: '10px'}}
             {...register("ID_NO")}
           />
           <Stack direction={'row'}>
@@ -150,7 +156,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
               <AddPhotoAlternateIcon color="primary" fontSize="large"/>
               <input type="file" onChange={(e)=>setImage(e.target.files[0])} style={{display: 'none'}} />
             </label>
-            {image && <Avatar src={URL.createObjectURL(image)} sx={{width: '100px', height: '100px', borderRadius: '4px'}}/>}
+            {image ? <Avatar src={URL.createObjectURL(image)} sx={{width: '100px', height: '100px', borderRadius: '4px'}}/> : <Avatar src={employee?.image} sx={{width: '100px', height: '100px', borderRadius: '4px'}}/>}
           </Stack>
         </DialogContent>
         <DialogActions>

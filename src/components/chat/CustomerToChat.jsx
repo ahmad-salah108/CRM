@@ -61,17 +61,17 @@ const CustomerToChat = ({ data }) => {
 
   let lastMsg =
     data?.messages?.type == "chat"
-      ? data.messages.body
+      ? (data.messages?.body.length > 10 ? data.messages?.body.slice(0, 10) + '...' : data.messages?.body)
       : data?.messages?.type == "image"
-      ? <Stack direction={'row'}><ImageIcon/><Typography>صورة</Typography></Stack>
+      ? <Stack direction={'row'}><ImageIcon fontSize="small"/><Typography fontSize="small">صورة</Typography></Stack>
       : data?.messages?.type == "video"
-      ? <Stack direction={'row'}><VideoFileIcon/><Typography>فيديو</Typography></Stack>
-      : data?.messages?.type == "ptt"
-      ? <Stack direction={'row'}><KeyboardVoiceIcon/><Typography>رسالة صوتية</Typography></Stack>
+      ? <Stack direction={'row'}><VideoFileIcon fontSize="small"/><Typography fontSize="small">فيديو</Typography></Stack>
+      : data?.messages?.type == "ptt" || data?.messages?.type == "audio"
+      ? <Stack direction={'row'}><KeyboardVoiceIcon fontSize="small"/><Typography fontSize={'small'}>رسالة صوتية</Typography></Stack>
       : data?.messages?.type == "document"
-      ? <Stack direction={'row'}><InsertDriveFileIcon/><Typography>ملف</Typography></Stack>
+      ? <Stack direction={'row'}><InsertDriveFileIcon fontSize="small"/><Typography fontSize="small">ملف</Typography></Stack>
       : data?.messages?.type == "sticker"
-      ? <Stack direction={'row'}><NoteIcon/><Typography>ملصق</Typography></Stack>
+      ? <Stack direction={'row'}><NoteIcon fontSize="small"/><Typography fontSize="small">ملصق</Typography></Stack>
       : "";
 
   return (
@@ -84,13 +84,13 @@ const CustomerToChat = ({ data }) => {
         <ListItemAvatar>
           <Avatar
             alt="محمد احمد"
-            src=""
+            src={data?.image}
             sx={{ width: "46px", height: "46px" }}
           />
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Title name={data.name} time={new Date(data.last_time * 1000)} />
+            <Title name={data.name ? data.name : "أنا"} time={new Date(data.last_time * 1000)} />
           }
           secondary={<LastMessage msg={lastMsg} num={2} />}
         />

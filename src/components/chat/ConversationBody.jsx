@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import Message from "./Message";
 import Pusher from 'pusher-js';
 
-const ConversationBody = () => {
+const ConversationBody = ({ setConversation }) => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { token } = useSelector((state) => state.user);
@@ -16,15 +16,11 @@ const ConversationBody = () => {
   const [conversationData, setConversationData] = useState();
   const [arrivalMessage, setArrivalMessage] = useState();
   const {ChatId} = useParams()
-  console.log(messages)
-  console.log(conversationData)
   const chatLoading = useRef();
   const divScroll = useRef();
 
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
     if(!nextLink){
-      console.log('asd')
-      chatLoading.current.style.display = 'none';
       return;
     }
     setLoading(true);
@@ -57,6 +53,7 @@ const ConversationBody = () => {
         } else {
           setMessages(prev => [...prev, ...data.messages.data]);
           setConversationData(data)
+          setConversation(data.conversation)
         }
       })
       .catch((err) => {
@@ -83,6 +80,9 @@ const ConversationBody = () => {
     channel.bind("message-sent",(data)=>{
         console.log(data)
         setArrivalMessage(data)
+    });
+    channel.bind("conversation-created",(data)=>{
+        console.log(data)
     });
   },[])
 
@@ -119,7 +119,6 @@ const ConversationBody = () => {
           hasMore={true}
           scrollableTarget="scrollableDiv"
           style={{ display: 'flex', flexDirection: 'column-reverse' }}
-          loader={<CircularProgress ref={chatLoading} id="chatLoading" sx={{margin: '15px auto'}}/>}
           next={() => {
             fetchMessages(conversationData.messages.next_page_url)
           }}
@@ -128,6 +127,7 @@ const ConversationBody = () => {
             messages.map(data => {
               return <Message key={data.id} data={data} conversationData={conversationData.conversation} />;
             })}
+            {loading && <CircularProgress ref={chatLoading} id="chatLoading" sx={{margin: '15px auto'}}/>}
         </InfiniteScroll>
       }
     </Box>

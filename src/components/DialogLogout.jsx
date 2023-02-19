@@ -8,17 +8,18 @@ const DialogLogout = ({open, handleClose, userLogout}) => {
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      sx={{'& .MuiPaper-root': {padding: '8px 35px'}}}
     >
-      <DialogTitle id="alert-dialog-title">
+      {/* <DialogTitle id="alert-dialog-title">
         تسجيل خروج
-      </DialogTitle>
+      </DialogTitle> */}
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           هل تريد تسجيل الخروج؟
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>إلغاء</Button>
+      <DialogActions sx={{justifyContent: 'center'}}>
+        <Button onClick={handleClose} variant='outlined'>إلغاء</Button>
         <Button onClick={()=>{userLogout(); handleClose()}} autoFocus variant="contained">
           موافق
         </Button>

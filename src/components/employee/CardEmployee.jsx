@@ -23,7 +23,7 @@ const CardEmployee = ({employee, setEmployees}) => {
                 <Typography fontSize={'small'}>{employee?.phone_NO}</Typography>
               </Stack>
               <Stack direction={'column'} sx={{gap: '3px'}}>
-                <Typography fontSize={'small'} color='fontLight'>رقم</Typography>
+                <Typography fontSize={'small'} color='fontLight'>رقم الهوية</Typography>
                 <Typography fontSize={'small'}>{employee?.ID_NO}</Typography>
               </Stack>
             </Stack>

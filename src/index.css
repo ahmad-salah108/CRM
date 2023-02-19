@@ -27,3 +27,6 @@ a {
   pointer-events: none;
   opacity: 0.5;
 }
+audio{
+  border-radius: 100vh;
+}

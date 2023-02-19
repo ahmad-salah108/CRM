@@ -53,17 +53,17 @@ const DialogDeleteEmployee = ({openDelete, handleClose, employee, setEmployees})
   };
 
   return (
-    <Dialog open={openDelete} onClose={handleClose}>
+    <Dialog open={openDelete} onClose={handleClose} sx={{'& .MuiPaper-root': {padding: '8px 35px'}}}>
     {/* <DialogTitle>تعديل الموظف</DialogTitle> */}
     <DialogContent>
-      <Typography sx={{padding: '0 20px'}}>هل تريد حذف الموظف؟</Typography>
+      <DialogContentText>هل تريد حذف الموظف؟</DialogContentText>
     </DialogContent>
-    <DialogActions>
+    <DialogActions sx={{justifyContent: 'center'}}>
       <Button onClick={handleDelete} variant='contained' className={loading ? 'disabled' : ''}>
         {loading && <CircularProgress color="white" sx={{width: '20px !important', height: '20px !important', marginInlineEnd: '5px'}}/>}
         موافق
         </Button>
-      <Button onClick={handleClose}>إلغاء</Button>
+      <Button onClick={handleClose} variant='outlined'>إلغاء</Button>
     </DialogActions>
   </Dialog>
   )

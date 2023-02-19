@@ -23,7 +23,7 @@ const BoxTime = styled(Box)({
 });
 
 export default function Message({ data, conversationData }) {
-  const theme = useTheme()
+  const theme = useTheme();
 
   const MessageText = styled(Typography)(({ theme }) => ({
     // ...(lang == 'en' ? {
@@ -61,12 +61,11 @@ export default function Message({ data, conversationData }) {
           }}
         >
           <>
-            {data.type == "ptt" && (
+            {data.type == "ptt" || data.type == "audio" ? (
               <audio controls>
                 <source src={data?.media} />
               </audio>
-            )}
-            {data.type != "ptt" && (
+            ) : (
               <MessageText
                 sx={{
                   maxWidth: "450px",
@@ -77,7 +76,7 @@ export default function Message({ data, conversationData }) {
                 }}
               >
                 {data.type == "image" || data.type == "sticker" ? (
-                  <Stack direction={'column'}>
+                  <Stack direction={"column"}>
                     <a
                       href={data?.media}
                       target="_blank"
@@ -100,12 +99,15 @@ export default function Message({ data, conversationData }) {
                     />
                   </Stack>
                 ) : data.type == "video" ? (
-                  <Stack direction={'column'}>
+                  <Stack direction={"column"}>
                     <video
                       controls
                       width="300"
                       height={"300"}
-                      style={{ borderRadius: "12px", background: theme.palette.black }}
+                      style={{
+                        borderRadius: "12px",
+                        background: theme.palette.black,
+                      }}
                     >
                       <source src={data?.media} />
                     </video>
@@ -127,7 +129,7 @@ export default function Message({ data, conversationData }) {
                     }}
                   >
                     <Stack direction={"row"} sx={{ gap: "5px" }}>
-                      {data?.body} <InsertDriveFileIcon />
+                      <InsertDriveFileIcon /> {data.body ? data.body : "ملف"}
                     </Stack>
                   </a>
                 ) : (

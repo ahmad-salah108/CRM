@@ -1,4 +1,11 @@
-import { Box, Button, IconButton, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { useRef } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
@@ -8,7 +15,10 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import VoiceRecorder from "./VoiceRecorder";
+import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
+import { useEffect } from "react";
 
 const ConversationFooter = () => {
   const fileInput = useRef();
@@ -17,7 +27,7 @@ const ConversationFooter = () => {
   const { token } = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
   const [fileToSend, setFileToSend] = useState();
-  console.log(fileToSend)
+  const [openVoice, setOpenVoice] = useState(false);
   const {
     register,
     handleSubmit,
@@ -201,6 +211,16 @@ const ConversationFooter = () => {
       });
   };
 
+  // close divs when click outside
+  useEffect(() => {
+    window.addEventListener("click", function (e) {
+      if (!document.querySelector(".close-fileToSend").contains(e.target)) {
+        setFileToSend("");
+        fileInput.current.value = null;
+      }
+    });
+  }, []);
+
   return (
     <Box sx={{ position: "relative" }}>
       {fileToSend && (
@@ -216,6 +236,7 @@ const ConversationFooter = () => {
             maxWidth: "500px",
           }}
           bgcolor="eee"
+          className="close-fileToSend"
         >
           {fileToSend.type.split("/")[0] == "image" ? (
             <form
@@ -310,8 +331,8 @@ const ConversationFooter = () => {
               >
                 <Close />
               </IconButton>
-              <Stack direction='row'>
-                <InsertDriveFileIcon/>
+              <Stack direction="row">
+                <InsertDriveFileIcon />
                 <Typography>{fileToSend.name}</Typography>
               </Stack>
               <Stack direction="row" sx={{ width: "100%" }}>
@@ -333,6 +354,23 @@ const ConversationFooter = () => {
               </Stack>
             </form>
           )}
+        </Stack>
+      )}
+      {openVoice && !fileToSend && (
+        <Stack
+          direction={"column"}
+          sx={{
+            position: "absolute",
+            bottom: "50px",
+            right: "21px",
+            padding: "8px",
+            borderRadius: "4px",
+            width: "fit-content",
+            maxWidth: "500px",
+          }}
+          bgcolor="eee"
+        >
+          <VoiceRecorder setOpenVoice={setOpenVoice} />
         </Stack>
       )}
       <Box sx={{ padding: "3px 8px", background: theme.palette.eee }}>
@@ -365,9 +403,20 @@ const ConversationFooter = () => {
               }}
               {...register("message")}
             />
-            <IconButton type="submit" color="primary">
-              <SendIcon sx={{ transform: "rotate(180deg)" }} />
-            </IconButton>
+            {watch("message") && watch("message").trim() != "" ? (
+              <IconButton type="submit" color="primary">
+                <SendIcon sx={{ transform: "rotate(180deg)" }} />
+              </IconButton>
+            ) : (
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  setOpenVoice((prev) => !prev);
+                }}
+              >
+                <KeyboardVoiceIcon />
+              </IconButton>
+            )}
           </form>
         </Stack>
       </Box>
