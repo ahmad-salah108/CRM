@@ -284,7 +284,7 @@ const Layout = () => {
               </ListItemButton>
             </ListItem>
           </Tooltip>
-          <Tooltip
+          {currentUser.role_id == '1' && <Tooltip
             title={open ? "" : "الموظفين"}
             placement={theme.direction === "rtl" ? "left" : "right"}
           >
@@ -312,7 +312,7 @@ const Layout = () => {
                 />
               </ListItemButton>
             </ListItem>
-          </Tooltip>
+          </Tooltip>}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

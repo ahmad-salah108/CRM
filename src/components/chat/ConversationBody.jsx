@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Message from "./Message";
 import Pusher from 'pusher-js';
 
@@ -16,6 +16,7 @@ const ConversationBody = ({ setConversation }) => {
   const [conversationData, setConversationData] = useState();
   const [arrivalMessage, setArrivalMessage] = useState();
   const {ChatId} = useParams()
+  const navigate = useNavigate();
   const divScroll = useRef();
 
   const fetchMessages = (nextLink = `${process.env.REACT_APP_API_URL}/public/api/auth/conversations/show`)=>{
@@ -41,14 +42,15 @@ const ConversationBody = ({ setConversation }) => {
       .then((data) => {
         setLoading(false);
         if (!data.status) {
-          Object.keys(data.errors)
-            .slice(0, 3)
-            .forEach((e) => {
-              enqueueSnackbar(data.errors[e][0], {
-                variant: "error",
-                autoHideDuration: 2000,
-              });
-            });
+          navigate('/chat/not-found');
+          // Object.keys(data.errors)
+          //   .slice(0, 3)
+          //   .forEach((e) => {
+          //     enqueueSnackbar(data.errors[e][0], {
+          //       variant: "error",
+          //       autoHideDuration: 2000,
+          //     });
+          //   });
         } else {
           setMessages(prev => [...prev, ...data.messages.data]);
           setConversationData(data)
@@ -57,10 +59,11 @@ const ConversationBody = ({ setConversation }) => {
       })
       .catch((err) => {
         setLoading(false);
-        enqueueSnackbar("لا يوجد اتصال بالانترنت", {
-          variant: "error",
-          autoHideDuration: 2000,
-        });
+        navigate('/chat/not-found');
+        // enqueueSnackbar("لا يوجد اتصال بالانترنت", {
+        //   variant: "error",
+        //   autoHideDuration: 2000,
+        // });
         console.log(err);
       });
   }
@@ -77,7 +80,6 @@ const ConversationBody = ({ setConversation }) => {
     });
     const channel = pusher.subscribe('Staff-Management');
     channel.bind("message-sent",(data)=>{
-        console.log(data)
         setArrivalMessage(data)
     });
   },[])

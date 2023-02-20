@@ -51,15 +51,7 @@ const Employee = () => {
   return (
     <Grid
     container
-    sx={{rowGap: '24px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}
-      // direction={"row"}
-      // sx={{
-      //   flexWrap: "wrap",
-      //   justifyContent: "space-around",
-      //   alignItems: "center",
-      //   gap: "15px",
-      // }}
-    >
+    sx={{rowGap: '24px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap'}}>
       {loading && 
         <>
           <CardSkeleton/>

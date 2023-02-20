@@ -53,7 +53,7 @@ const CustomerToChat = ({ data }) => {
       }}
     >
       <Box>{name}</Box>
-      <Typography sx={{ color: theme.palette.textMuted, fontSize: "11px" }}>
+      <Typography sx={{ color: theme.palette.textMuted, fontSize: "11px", textAlign: 'end' }}>
         <ReactTimeAgo date={time} locale="ar" />
       </Typography>
     </Stack>

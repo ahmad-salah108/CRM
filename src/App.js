@@ -1,9 +1,9 @@
 import { CssBaseline } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import rtlPlugin from 'stylis-plugin-rtl';
-import { CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { prefixer } from 'stylis';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import rtlPlugin from "stylis-plugin-rtl";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import { prefixer } from "stylis";
 import Layout from "./Layout";
 import {
   createBrowserRouter,
@@ -20,38 +20,45 @@ import Profile from "./pages/Profile";
 
 // Create rtl cache
 const cacheRtl = createCache({
-  key: 'muirtl',
+  key: "muirtl",
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
 const theme = createTheme({
-  direction: 'rtl',
+  direction: "rtl",
   palette: {
     primary: {
-      main: '#645CBB'
+      main: "#645CBB",
     },
     secondary: {
-      main: '#A084DC'
+      main: "#A084DC",
     },
     white: {
-      main: '#fff'
+      main: "#fff",
     },
-    textMuted: 'rgba(0, 0, 0, 0.6)',
-    ddd: '#ddd',
-    eee: '#eee',
-    cardText: '#828282',
-    bgLight: 'rgb(191, 172, 226, 0.5)',
-    primaryLight: 'rgb(100, 92, 187, 0.3)',
-    ef: '#efefef',
-    a4: '#a4a4a4',
-    fontLight: 'rgb(33, 37, 41, 0.75)',
-    black: '#000'
-  }
+    textMuted: "rgba(0, 0, 0, 0.6)",
+    ddd: "#ddd",
+    eee: "#eee",
+    cardText: "#828282",
+    bgLight: "rgb(191, 172, 226, 0.5)",
+    primaryLight: "rgb(100, 92, 187, 0.3)",
+    ef: "#efefef",
+    a4: "#a4a4a4",
+    fontLight: "rgb(33, 37, 41, 0.75)",
+    black: "#000",
+  },
 });
 
 function App() {
-  const { token } = useSelector(state => state.user)
-  const page404 = <h1 style={{textAlign: 'center', marginTop: '250px'}}>404 | الصفحة غير موجودة</h1>;
+  const { token, currentUser } = useSelector((state) => state.user);
+  const page404 = (
+    <h1 style={{ textAlign: "center", marginTop: "250px" }}>
+      404 | الصفحة غير موجودة
+    </h1>
+  );
+  const conversation404 = (
+    <h1 style={{ textAlign: "center", marginTop: "250px" }}>المحادثة غير موجودة</h1>
+  );
   const router = createBrowserRouter([
     {
       path: "/",
@@ -62,47 +69,61 @@ function App() {
           element: <Home />,
         },
         {
-          path: 'chat',
-          element: <Chat/>,
+          path: "chat",
+          element: <Chat />,
           children: [
             {
               index: true,
-              element: <h1 style={{fontWeight: 'normal', textAlign: 'center', marginTop: '250px'}}>اختر محادثة</h1>
+              element: (
+                <h1
+                  style={{
+                    fontWeight: "500",
+                    textAlign: "center",
+                    marginTop: "250px",
+                  }}
+                >
+                  اختر محادثة
+                </h1>
+              ),
             },
             {
-              path: ':ChatId',
-              element: <CoversationBox/>
-            }
-          ]
+              path: 'not-found',
+              element: conversation404
+            },
+            {
+              path: ":ChatId",
+              element: <CoversationBox />,
+            },
+          ],
+        },
+        (currentUser?.role_id == "1" && {
+          path: "employee",
+          element: <Employee />,
+        }),
+        {
+          path: "profile",
+          element: <Profile />,
         },
         {
-          path: 'employee',
-          element: <Employee/>
+          path: "*",
+          element: page404,
         },
-        {
-          path: 'profile',
-          element: <Profile/>
-        },
-        {
-          path: '*',
-          element: page404
-        }
       ],
     },
     {
-      path: '/login',
-      element: token ? <Navigate to={"/"} /> : <Login />
+      path: "/login",
+      element: token ? <Navigate to={"/"} /> : <Login />,
     },
     {
-      path: '*',
-      element: page404
-    }
+      path: "*",
+      element: page404,
+    },
   ]);
 
   return (
     <ThemeProvider theme={theme}>
       <CacheProvider value={cacheRtl}>
-        <CssBaseline/>
+        <CssBaseline />
         <RouterProvider router={router} />
       </CacheProvider>
     </ThemeProvider>

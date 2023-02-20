@@ -108,6 +108,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             type="text"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("name")}
           />
           <TextField
@@ -116,6 +117,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             type="email"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("email")}
             required
           />
@@ -125,6 +127,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             type="password"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("password")}
             required
           />
@@ -134,6 +137,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             type="text"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("phone_NO")}
           />
           <TextField
@@ -142,6 +146,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             type="text"
             fullWidth
             variant="standard"
+            sx={{marginBottom: '10px'}}
             {...register("job")}
           />
           <TextField

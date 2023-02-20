@@ -109,7 +109,6 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             defaultValue={employee?.email}
             sx={{marginBottom: '10px'}}
             {...register("email")}
-            required
           />
           <TextField
             margin="dense"
