@@ -162,7 +162,7 @@ const DialogEditEmployee = ({ openEdit, handleClose, employee, setEmployees }) =
             {loading && <CircularProgress color="white" sx={{width: '20px !important', height: '20px !important', marginInlineEnd: '5px'}}/>}
             موافق
           </Button>
-          <Button onClick={handleClose}>إلغاء</Button>
+          <Button onClick={handleClose} variant='outlined'>إلغاء</Button>
         </DialogActions>
       </form>
     </Dialog>

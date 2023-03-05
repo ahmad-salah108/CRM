@@ -198,7 +198,7 @@ const DialogAddEmployee = ({ openAdd, handleClose, setEmployees }) => {
             )}
             موافق
           </Button>
-          <Button onClick={handleClose}>إلغاء</Button>
+          <Button onClick={handleClose} variant='outlined'>إلغاء</Button>
         </DialogActions>
       </form>
     </Dialog>
