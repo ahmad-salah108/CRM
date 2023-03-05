@@ -15,6 +15,7 @@ import React from "react";
 import ReactTimeAgo from "react-time-ago";
 import ReadMoreReact from "read-more-react/dist/components/ReadMoreReact";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { FileIcon, defaultStyles } from 'react-file-icon';
 
 const BoxTime = styled(Box)({
   color: "#A4A4A4",
@@ -24,6 +25,8 @@ const BoxTime = styled(Box)({
 
 export default function Message({ data, conversationData }) {
   const theme = useTheme();
+  const documentExtention = data?.media && data?.media.split(".");
+  const documentName = data?.media && data?.media.split("/");
 
   const MessageText = styled(Typography)(({ theme }) => ({
     // ...(lang == 'en' ? {
@@ -61,7 +64,7 @@ export default function Message({ data, conversationData }) {
           }}
         >
           <>
-            {data.type == "ptt" || data.type == "audio" ? (
+            {data.type == "audio" ? (
               <audio controls>
                 <source src={data?.media} />
               </audio>
@@ -91,12 +94,12 @@ export default function Message({ data, conversationData }) {
                         }}
                       />
                     </a>
-                    <ReadMoreReact
+                    {data.body && <ReadMoreReact
                       text={data?.body}
                       min={80}
                       max={200}
                       readMoreText={"اقرأ المزيد"}
-                    />
+                    />}
                   </Stack>
                 ) : data.type == "video" ? (
                   <Stack direction={"column"}>
@@ -111,27 +114,35 @@ export default function Message({ data, conversationData }) {
                     >
                       <source src={data?.media} />
                     </video>
-                    <ReadMoreReact
+                    {data.body && <ReadMoreReact
                       text={data?.body}
                       min={80}
                       max={200}
                       readMoreText={"اقرأ المزيد"}
-                    />
+                    />}
                   </Stack>
                 ) : data.type == "document" ? (
-                  <a
-                    href={data?.media}
-                    target="_blank"
-                    style={{
-                      display: "grid",
-                      placeItems: "center",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    <Stack direction={"row"} sx={{ gap: "5px" }}>
-                      <InsertDriveFileIcon /> {data.body ? data.body : "ملف"}
-                    </Stack>
-                  </a>
+                  <Stack direction={"column"} sx={{gap: '10px'}}>
+                    <a
+                      href={data?.media}
+                      target="_blank"
+                      style={{
+                        display: "grid",
+                        placeItems: "center",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      <Stack direction={"row"} sx={{ gap: "5px", '& svg': {width: '20px'}, alignItems: 'center' }}>
+                        <FileIcon extension={documentExtention[documentExtention.length - 1]} {...defaultStyles[documentExtention[documentExtention.length - 1]]} /> {documentName[documentName.length - 1].slice(2)}
+                      </Stack>
+                    </a>
+                    {data.body && <ReadMoreReact
+                      text={data?.body}
+                      min={80}
+                      max={200}
+                      readMoreText={"اقرأ المزيد"}
+                    />}
+                  </Stack>
                 ) : (
                   <ReadMoreReact
                     text={data.body}

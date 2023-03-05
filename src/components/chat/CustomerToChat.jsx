@@ -12,11 +12,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { NavLink } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
-import ImageIcon from '@mui/icons-material/Image';
-import VideoFileIcon from '@mui/icons-material/VideoFile';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import NoteIcon from '@mui/icons-material/Note';
+import ImageIcon from "@mui/icons-material/Image";
+import VideoFileIcon from "@mui/icons-material/VideoFile";
+import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import NoteIcon from "@mui/icons-material/Note";
+import { defaultStyles, FileIcon } from "react-file-icon";
 
 const NewMessages = styled(Box)(({ theme }) => ({
   width: "18px",
@@ -42,6 +43,8 @@ const LastMessage = ({ msg, num }) => (
 
 const CustomerToChat = ({ data }) => {
   const theme = useTheme();
+  const documentExtention = data?.messages.media && data?.messages.media.split(".");
+  const documentName = data?.messages.media && data?.messages.media.split("/");
 
   const Title = ({ name, time }) => (
     <Stack
@@ -53,26 +56,58 @@ const CustomerToChat = ({ data }) => {
       }}
     >
       <Box>{name}</Box>
-      <Typography sx={{ color: theme.palette.textMuted, fontSize: "11px", textAlign: 'end' }}>
+      <Typography
+        sx={{
+          color: theme.palette.textMuted,
+          fontSize: "11px",
+          textAlign: "end",
+        }}
+      >
         <ReactTimeAgo date={time} locale="ar" />
       </Typography>
     </Stack>
   );
 
   let lastMsg =
-    data?.messages?.type == "chat"
-      ? (data.messages?.body.length > 10 ? data.messages?.body.slice(0, 10) + '...' : data.messages?.body)
-      : data?.messages?.type == "image"
-      ? <Stack direction={'row'}><ImageIcon fontSize="small"/><Typography fontSize="small">صورة</Typography></Stack>
-      : data?.messages?.type == "video"
-      ? <Stack direction={'row'}><VideoFileIcon fontSize="small"/><Typography fontSize="small">فيديو</Typography></Stack>
-      : data?.messages?.type == "ptt" || data?.messages?.type == "audio"
-      ? <Stack direction={'row'}><KeyboardVoiceIcon fontSize="small"/><Typography fontSize={'small'}>رسالة صوتية</Typography></Stack>
-      : data?.messages?.type == "document"
-      ? <Stack direction={'row'}><InsertDriveFileIcon fontSize="small"/><Typography fontSize="small">ملف</Typography></Stack>
-      : data?.messages?.type == "sticker"
-      ? <Stack direction={'row'}><NoteIcon fontSize="small"/><Typography fontSize="small">ملصق</Typography></Stack>
-      : "";
+    data?.messages?.type == "text" ? (
+      data.messages?.body.length > 10 ? (
+        data.messages?.body.slice(0, 10) + "..."
+      ) : (
+        data.messages?.body
+      )
+    ) : data?.messages?.type == "image" ? (
+      <Stack direction={"row"}>
+        <ImageIcon fontSize="small" />
+        <Typography fontSize="small">صورة</Typography>
+      </Stack>
+    ) : data?.messages?.type == "video" ? (
+      <Stack direction={"row"}>
+        <VideoFileIcon fontSize="small" />
+        <Typography fontSize="small">فيديو</Typography>
+      </Stack>
+    ) : data?.messages?.type == "audio" ? (
+      <Stack direction={"row"}>
+        <KeyboardVoiceIcon fontSize="small" />
+        <Typography fontSize={"small"}>رسالة صوتية</Typography>
+      </Stack>
+    ) : data?.messages?.type == "document" ? (
+      <Stack direction={"row"} sx={{ gap: "5px", "& svg": { width: "20px" }, alignItems: 'center' }}>
+        <FileIcon
+          extension={documentExtention[documentExtention.length - 1]}
+          {...defaultStyles[documentExtention[documentExtention.length - 1]]}
+        />
+        <Typography fontSize="small">
+          {documentName[documentName.length - 1].length > 10 ? documentName[documentName.length - 1].slice(2, 10) + '...' : documentName[documentName.length - 1].slice(2)}
+        </Typography>
+      </Stack>
+    ) : data?.messages?.type == "sticker" ? (
+      <Stack direction={"row"}>
+        <NoteIcon fontSize="small" />
+        <Typography fontSize="small">ملصق</Typography>
+      </Stack>
+    ) : (
+      ""
+    );
 
   return (
     <NavLink
@@ -90,7 +125,10 @@ const CustomerToChat = ({ data }) => {
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Title name={data.name ? data.name : "أنا"} time={new Date(data.last_time * 1000)} />
+            <Title
+              name={data.name ? data.name : "أنا"}
+              time={new Date(data.last_time * 1000)}
+            />
           }
           secondary={<LastMessage msg={lastMsg} num={2} />}
         />

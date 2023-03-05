@@ -19,6 +19,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import VoiceRecorder from "./VoiceRecorder";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import { useEffect } from "react";
+import { defaultStyles, FileIcon } from "react-file-icon";
 
 const ConversationFooter = () => {
   const fileInput = useRef();
@@ -214,7 +215,7 @@ const ConversationFooter = () => {
   // close divs when click outside
   useEffect(() => {
     window.addEventListener("click", function (e) {
-      if (!document.querySelector(".close-fileToSend").contains(e.target)) {
+      if (document.querySelector(".close-fileToSend") && !document.querySelector(".close-fileToSend").contains(e.target)) {
         setFileToSend("");
         fileInput.current.value = null;
       }
@@ -331,8 +332,8 @@ const ConversationFooter = () => {
               >
                 <Close />
               </IconButton>
-              <Stack direction="row">
-                <InsertDriveFileIcon />
+              <Stack direction="row" sx={{'& svg': {width: '20px'}, gap: '5px'}}>
+                <FileIcon extension={fileToSend.type.split('/')[1]} {...defaultStyles[fileToSend.type.split('/')[1]]} />
                 <Typography>{fileToSend.name}</Typography>
               </Stack>
               <Stack direction="row" sx={{ width: "100%" }}>
@@ -381,7 +382,7 @@ const ConversationFooter = () => {
             style={{ display: "none" }}
             onChange={(e) => {
               setFileToSend(e.target.files[0]);
-              console.log(e);
+              console.log(e.target.files[0]);
             }}
           />
           <IconButton color="primary" onClick={() => fileInput.current.click()}>
