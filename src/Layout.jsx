@@ -171,8 +171,8 @@ const Layout = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              إدارة خدمة العملاء
+            <Typography variant="h6" noWrap component="div" sx={{letterSpacing: '2px'}}>
+                WIBBLE
             </Typography>
           </Stack>
           <Stack

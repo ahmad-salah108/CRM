@@ -164,15 +164,15 @@ const Profile = () => {
             </Stack>
           </Stack>
           <Divider/>
-          <form onSubmit={handleSubmit(handleSave)}>
+          <form onSubmit={currentUser.role_id == '1' && handleSubmit(handleSave)}>
             <Stack direction={'row'} sx={{flexWrap: 'wrap', justifyContent: 'space-between'}}>
               <Stack direction={'row'} sx={{columnGap: '80px', rowGap: '15px', flexWrap: 'wrap'}}>
                 <Stack direction={'column'}>
                   <Avatar src={(image && URL.createObjectURL(image)) || company?.company_logo} alt='صورة الشركة' sx={{width: '160px', height: '160px', borderRadius: '4px'}}/>
-                  <label style={{padding: '10px', cursor: 'pointer', width: 'fit-content'}}>
+                  {currentUser.role_id == '1' && <label style={{padding: '10px', cursor: 'pointer', width: 'fit-content'}}>
                     <AddPhotoAlternate color="primary" fontSize="large"/>
                     <input type="file" onChange={(e)=>setImage(e.target.files[0])} style={{display: 'none'}} />
-                  </label>
+                  </label>}
                 </Stack>
                 <Stack direction={'column'} sx={{gap: '15px'}}>
                   <Box>
@@ -180,6 +180,9 @@ const Profile = () => {
                     <TextField
                       {...register("company_name")}
                       size='small'
+                      InputProps={currentUser.role_id == '2' && {
+                        readOnly: true,
+                      }}
                       />
                   </Box>
                   <Box>
@@ -188,6 +191,9 @@ const Profile = () => {
                       {...register("company_email")}
                       type='email'
                       size='small'
+                      InputProps={currentUser.role_id == '2' && {
+                        readOnly: true,
+                      }}
                       />
                   </Box>
                   <Box>
@@ -195,16 +201,19 @@ const Profile = () => {
                     <TextField
                       {...register("company_phone_NO")}
                       size='small'
+                      InputProps={currentUser.role_id == '2' && {
+                        readOnly: true,
+                      }}
                       />
                   </Box>
                 </Stack>
               </Stack>
-              <Stack direction={'column'} sx={{justifyContent: 'flex-end'}}>
+              {currentUser.role_id == '1' && <Stack direction={'column'} sx={{justifyContent: 'flex-end'}}>
                 <Button variant='contained' type='submit' className={loading ? 'disabled' : ''}>
                   {loading && <CircularProgress color="white" sx={{width: '20px !important', height: '20px !important', marginInlineEnd: '5px'}}/>}
                   حفظ
                 </Button>
-              </Stack>
+              </Stack>}
             </Stack>
           </form>
         </Stack>

@@ -57,7 +57,7 @@ function App() {
     </h1>
   );
   const conversation404 = (
-    <h1 style={{ textAlign: "center", marginTop: "250px" }}>المحادثة غير موجودة</h1>
+    <h1 style={{ textAlign: "center", marginTop: "250px", userSelect: 'none' }}>المحادثة غير موجودة</h1>
   );
   const router = createBrowserRouter([
     {
@@ -80,6 +80,7 @@ function App() {
                     fontWeight: "500",
                     textAlign: "center",
                     marginTop: "250px",
+                    userSelect: 'none'
                   }}
                 >
                   اختر محادثة

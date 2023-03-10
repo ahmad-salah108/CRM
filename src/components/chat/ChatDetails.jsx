@@ -15,12 +15,14 @@ import CustomerToChat from "./CustomerToChat";
 import Pusher from "pusher-js";
 import SkeletonCustomerToChat from "./SkeletonCustomerToChat";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const ChatDetails = () => {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { token, currentUser } = useSelector((state) => state.user);
   const [conversations, setConversations] = useState([]);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -89,9 +91,14 @@ const ChatDetails = () => {
     });
     channel.bind("conversation-hide", (data) => {
       console.log(data);
-      if(currentUser.id != data.conversation.user_id){
+      if(currentUser.id != data.conversation.user_id && currentUser.role_id == '2'){
         setConversations(prev => prev.filter(e => e.id != data.conversation.id));
       }
+      navigate('/chat');
+      enqueueSnackbar(`تم الرد على ${data?.conversation?.name} من قبل موظف آخر`, {
+        variant: "success",
+        autoHideDuration: 3000,
+      });
     });
   }, []);
 
@@ -132,7 +139,7 @@ const ChatDetails = () => {
           (conversations.length > 0 ? (
             conversations.map((e) => <CustomerToChat key={e.id} data={e} />)
           ) : conversations.length == 0 ? (
-            <Typography variant="h5" color="a4" sx={{ textAlign: "center", marginTop: '100px' }}>
+            <Typography variant="h5" color="a4" sx={{ textAlign: "center", marginTop: '100px', userSelect: 'none' }}>
               لا يوجد محادثات
             </Typography>
           ) : (
